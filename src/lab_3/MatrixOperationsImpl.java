@@ -80,7 +80,7 @@ public class MatrixOperationsImpl implements IMatrixOperations {
     {
         // Creates a new matrix with one less row/column
         IMatrix minorMatrix = 
-                MatrixFactory.createArrayMatrix(matrix.getNumberOfRows() - 1, 
+                MatrixFactory.createLinkedMatrix(matrix.getNumberOfRows() - 1, 
                            matrix.getNumberOfColumns() - 1);
         
         int row = -1;

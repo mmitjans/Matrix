@@ -149,6 +149,18 @@ public class DoublyHeaderList<T> {
         return count;
     }
     
+    public T getDataAtPosition(int position)
+    {
+        DoublyHeaderListNode<T> temp = head;
+        
+        for(int i = -1; i < position;i++ )
+        {
+            temp = temp.next;
+        }
+        
+        return temp.data;
+    }
+    
     public void insertAtPosition(T data, int atRow, int atColumn) {
         if( atRow < 0 || atRow == 0 )
         {
@@ -159,7 +171,7 @@ public class DoublyHeaderList<T> {
             insertAtEnd(data, atRow, atColumn);
         }else{
             
-            DoublyHeaderListNode<T> temp= head;
+            DoublyHeaderListNode<T> temp = head;
             DoublyHeaderListNode<T> newNode = new DoublyHeaderListNode<T>(data);
             for(int i=0;i<atRow;i++){
                 temp=temp.next;

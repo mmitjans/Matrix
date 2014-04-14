@@ -19,9 +19,6 @@ public class MatrixLinkedImpl implements IMatrix {
     
     private DoublyHeaderList<Double> _data;
     
-    // A double array that holds the matrix data
-    private double matrixData[][];
-    
     /**
      * Default constructor of this class. It takes the number of rows and 
      * columns. It also creates the internal array that holds the element
@@ -33,8 +30,7 @@ public class MatrixLinkedImpl implements IMatrix {
     {
         this.numberOfColumns = numberOfColumns;
         this.numberOfRows = numberOfRows;
-        _data = new DoublyHeaderList<>();
-        this.matrixData = new double[this.numberOfRows][this.numberOfColumns];       
+        _data = new DoublyHeaderList<>();       
     }
     
     /**
@@ -45,6 +41,7 @@ public class MatrixLinkedImpl implements IMatrix {
      * @param atColumn Column index
      * @param value Double value to set in the matrix
      */
+    @Override
     public void setValue(int atRow, int atColumn, double value)
     {
         // Checks if the element indexes are valid
@@ -52,8 +49,6 @@ public class MatrixLinkedImpl implements IMatrix {
         
         _data.addRight(value, atRow, atColumn);
         
-        // Sets the value in the matrix
-        this.matrixData[atRow][atColumn] = value;
     }
     
     /**
@@ -64,12 +59,17 @@ public class MatrixLinkedImpl implements IMatrix {
      * @param atColumn
      * @return 
      */
+    @Override
     public double getValue(int atRow, int atColumn)
     {
+        int index = convertMatrixIndex(atRow, atColumn);
+        
+        Double value = (Double)_data.getDataAtPosition(index);
+        
         // Checks that the element indexes are valid
         checkIfValid(atRow, atColumn);
         // Returns the data
-        return this.matrixData[atRow][atColumn];
+        return value;
     }
     
     /**
@@ -81,7 +81,7 @@ public class MatrixLinkedImpl implements IMatrix {
         {
             for(int column = 0; column < this.numberOfColumns; column++)
             {
-                System.out.print(this.matrixData[row][column] + "\t");
+                System.out.print(getValue(row, column) + "\t");
             }
             
             System.out.println();
@@ -92,6 +92,7 @@ public class MatrixLinkedImpl implements IMatrix {
      * Returns a boolean indicating if the matrix is Squared (e.g 2x2, 3x3)
      * @return Returns true if the matrix is squared, otherwise false
      */
+    @Override
     public boolean isSquared()
     {
         return ( this.numberOfRows == this.numberOfColumns);
@@ -110,11 +111,17 @@ public class MatrixLinkedImpl implements IMatrix {
             throw new RuntimeException("Invalid row,column");
         }
     }
+    
+    private int convertMatrixIndex(int row, int column)
+    {
+        return ( this.numberOfRows * row ) + column;
+    }
    
     /**
      * Returns the size of the matrix
      * @return Matrix size
      */
+    @Override
     public int size()
     {
         return this.numberOfRows;
@@ -124,6 +131,7 @@ public class MatrixLinkedImpl implements IMatrix {
      * Returns the number of Rows
      * @return Number of rows
      */
+    @Override
     public int getNumberOfRows()
     {
         return this.numberOfRows;
@@ -133,6 +141,7 @@ public class MatrixLinkedImpl implements IMatrix {
      * Returns the number of columns
      * @return Column number
      */
+    @Override
     public int getNumberOfColumns()
     {
         return this.numberOfColumns;
@@ -142,13 +151,14 @@ public class MatrixLinkedImpl implements IMatrix {
      * Returns a string representation of the matrix
      * @return String containing the matrix content
      */
+    @Override
     public String toString()
     {
         StringBuilder builder = new StringBuilder();
         
         for (int row = 0; row < this.numberOfRows; row++) {
             for (int column = 0; column < this.numberOfColumns; column++) {
-                builder.append(this.matrixData[row][column] + "\t");
+                builder.append(getValue(row, column) + "\t");
             }
 
             builder.append("\n");
