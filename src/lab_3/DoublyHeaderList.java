@@ -39,6 +39,13 @@ public class DoublyHeaderList<T> {
             this.columnIndex = columnIndex;
         }
         
+        public DoublyHeaderListNode(T data, int rowIndex, int columnIndex)
+        {
+            this.data = data;
+            this.rowIndex = rowIndex;
+            this.columnIndex = columnIndex;
+        }
+        
         /**
          * Constructor that initializes to null the next and previous pointer 
          * and sets the data
@@ -79,7 +86,7 @@ public class DoublyHeaderList<T> {
      */
     public void addRight(T data, int atRow, int atColumn)
     {
-        insertAfter(data, this.head.previous, atRow, atColumn);
+        insertAtEnd(data, atRow, atColumn);
     }
     
     /**
@@ -87,16 +94,82 @@ public class DoublyHeaderList<T> {
      * @param data Data to store
      * @param node Node that this data is pointing to
      */
-    public void insertAfter(T data, 
-                            DoublyHeaderListNode<T> node,
-                            int atRow, 
+    public void insertAtEnd(T data, int atRow, 
                             int atColumn)
     {
         DoublyHeaderListNode<T> newNode = 
-                new DoublyHeaderListNode<T>(node, node.next, data, atRow, 
-                atColumn);
-        newNode.next.previous = newNode;
-        node.next = newNode;
+                new DoublyHeaderListNode<T>(data, atRow, atColumn);
+        
+        if(this.head == null)
+        {
+            newNode.next = newNode;
+            newNode.previous = newNode;
+            
+            head = newNode;
+        } else {
+            DoublyHeaderListNode<T> tempNode = head.previous;
+            
+            tempNode.next = newNode;
+            newNode.next = head;
+            head.previous = newNode;
+            newNode.previous = tempNode;
+        }
+        
+    }
+    
+    public void insertAtBeginning(T data, int atRow, int atColumn)
+    {
+        DoublyHeaderListNode<T> newnode = 
+                new DoublyHeaderListNode<T>(data, atRow, atColumn);
+        if (head == null) {
+            newnode.next = newnode;
+            newnode.previous = newnode;
+            head = newnode;
+        } else {
+            DoublyHeaderListNode<T> temp = head.previous;
+            temp.next = newnode;
+            newnode.previous = temp;
+            newnode.next = head;
+            head.previous = newnode;
+            head = newnode;
+        }
+    }
+    
+    public int getSize() {
+        int count = 0;
+        if (head == null)
+            return count;
+        else {
+            DoublyHeaderListNode<T> temp = head;
+            do {
+                temp = temp.next;
+                count++;
+            } while (temp != head);
+        }
+        return count;
+    }
+    
+    public void insertAtPosition(T data, int atRow, int atColumn) {
+        if( atRow < 0 || atRow == 0 )
+        {
+            insertAtBeginning(data, atRow, atColumn);
+        }  
+        
+        else if(atRow > getSize()|| atRow == getSize()){
+            insertAtEnd(data, atRow, atColumn);
+        }else{
+            
+            DoublyHeaderListNode<T> temp= head;
+            DoublyHeaderListNode<T> newNode = new DoublyHeaderListNode<T>(data);
+            for(int i=0;i<atRow;i++){
+                temp=temp.next;
+            }
+            
+            newNode.next = temp.next;
+            temp.next.previous = newNode;
+            temp.next = newNode;
+            newNode.previous = temp;
+        }
     }
     
     /**
